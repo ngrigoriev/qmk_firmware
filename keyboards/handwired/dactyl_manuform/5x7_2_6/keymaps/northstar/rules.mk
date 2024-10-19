@@ -13,10 +13,7 @@ CAPS_WORD_ENABLE = yes
 # https://docs.qmk.fm/#/custom_quantum_functions?id=deferred-execution
 DEFERRED_EXEC_ENABLE = yes
 
-# 1 - conflicts with the home row modifiers
-# 2 - problematic for the tools like vim where a single wrong character can cause lots of troubles in normal mode
-AUTO_SHIFT_ENABLE = yes
-# and retro shift corrects this
+AUTO_SHIFT_ENABLE = no
 
 EXTRAKEY_ENABLE = yes
 # COMMAND_ENABLE = yes

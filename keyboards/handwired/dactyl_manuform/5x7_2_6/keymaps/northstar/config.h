@@ -44,4 +44,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define AUTO_SHIFT_TIMEOUT 200
 #define AUTO_SHIFT_NO_AUTO_REPEAT
 
-#define RETRO_SHIFT 1000
+#define RETRO_SHIFT 400
