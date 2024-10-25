@@ -1,13 +1,17 @@
 #!/usr/bin/python3
 
 import json
+import commentjson
 import argparse
+import csv
+import os
+import jq
 
 
 def parse_json_file(file_path, expected_type):
     try:
         with open(file_path, 'r') as file:
-            data = json.load(file)
+            data = commentjson.load(file)
             if isinstance(data, expected_type):
                 return data
             else:
@@ -20,20 +24,51 @@ def parse_json_file(file_path, expected_type):
         print(f"Error: The file '{file_path}' was not found.")
 
 
-def update_keys(kle_template, layer_it):
+def make_label(kc, kc_dict):
+    dw = kc_dict.get(kc)
+    if dw:
+        return dw
+    return kc
+
+
+def update_keys(kle_template, layer_it, kc_dict):
     result = []
     for row in kle_template:
         if isinstance(row, list):
             kle_row = []
             for obj in row:
                 if isinstance(obj, str):
-                    kle_row.append(str(next(layer_it)))
+                    kc = str(next(layer_it))
+                    kle_row.append(make_label(kc, kc_dict))
                 else:
                     kle_row.append(obj)
             result.append(kle_row)
         else:
             result.append(row)
     return result
+
+
+def load_qmk_keycodes(dir, kc_dict):
+    jq_prog = jq.compile('.keycodes | to_entries | map({key: .value.key, label: .value.label, aliases: (.value.aliases + [.value.key] // [.value.key])}) | map({alias: .aliases | .[], label: .label}) ')
+    for kc_fn in os.listdir(dir):
+        f = os.path.join(dir, kc_fn)
+        if os.path.isfile(f):
+            print("Reading file: ",f)
+            qmk_dict = parse_json_file(f, dict)
+            print(qmk_dict)
+            for qmk_kc in jq_prog.input_value(qmk_dict).all():
+                print(qmk_kc)
+                if hasattr(qmk_kc, 'label'):
+                    kc_dict[qmk_kc['alias']] = qmk_kc['label']
+    return kc_dict
+
+
+def load_custom_dict(dict_file, kc_dict):
+    with open(dict_file) as dfd:
+        rows = csv.reader(dfd, delimiter=" ")
+        for row in rows:
+            kc_dict[row[0]] = str(row[1]).replace(":", "\n")
+    return kc_dict
 
 
 def main():
@@ -47,6 +82,10 @@ def main():
                         help='Path to the keymap KLE template JSON file')
     parser.add_argument('layer-index', type=int,
                         help='Name of the QMK layer to use (0-based)')
+    parser.add_argument('-d', '--dict',
+                        help='Additional dictionary file to use (see dict-sample.json')
+    parser.add_argument("-q", "--qmk-firmware-root",
+                        help='Root directory of QMK firmware source tree for reading the keycodes')
 
     # Parse arguments
     args = vars(parser.parse_args())
@@ -59,7 +98,14 @@ def main():
 
     layer_it = iter(layer)
 
-    kle_result = update_keys(kle_template, layer_it)
+    kc_dict = {}
+    print(args)
+    if args['qmk_firmware_root']:
+        load_qmk_keycodes(args['qmk_firmware_root'], kc_dict)
+    if args['dict']:
+        load_custom_dict(args['dict'], kc_dict)
+
+    kle_result = update_keys(kle_template, layer_it, kc_dict)
 
     print(json.dumps(kle_result))
 
