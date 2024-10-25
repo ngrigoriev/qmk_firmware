@@ -49,17 +49,15 @@ def update_keys(kle_template, layer_it, kc_dict):
 
 
 def load_qmk_keycodes(dir, kc_dict):
-    jq_prog = jq.compile('.keycodes | to_entries | map({key: .value.key, label: .value.label, aliases: (.value.aliases + [.value.key] // [.value.key])}) | map({alias: .aliases | .[], label: .label}) ')
+    jq_prog = jq.compile('.keycodes // {} | to_entries | [.[] | select (.value | type == "object")] | map({key: .value.key, label: .value.label, aliases: (.value.aliases + [.value.key] // [.value.key])}) | map({alias: .aliases | .[], label: .label}) | .[]')
     for kc_fn in os.listdir(dir):
         f = os.path.join(dir, kc_fn)
-        if os.path.isfile(f):
-            print("Reading file: ",f)
+        if os.path.isfile(f) and (os.stat(f).st_size > 2):
             qmk_dict = parse_json_file(f, dict)
-            print(qmk_dict)
-            for qmk_kc in jq_prog.input_value(qmk_dict).all():
-                print(qmk_kc)
-                if hasattr(qmk_kc, 'label'):
-                    kc_dict[qmk_kc['alias']] = qmk_kc['label']
+            qmk_dict_transfomed = jq_prog.input_value(qmk_dict)
+            for qmk_kc in iter(qmk_dict_transfomed):
+                if 'label' in qmk_kc:
+                    kc_dict[qmk_kc['alias']] = "\n\n\n\n\n\n\n\n\n" + str(qmk_kc['label']) + "\n\n"
     return kc_dict
 
 
@@ -67,6 +65,9 @@ def load_custom_dict(dict_file, kc_dict):
     with open(dict_file) as dfd:
         rows = csv.reader(dfd, delimiter=" ")
         for row in rows:
+            label = str(row[1])
+            if label.count(':') == 0:
+                label = "\n\n\n\n\n\n\n\n\n" + label + "\n\n"
             kc_dict[row[0]] = str(row[1]).replace(":", "\n")
     return kc_dict
 
@@ -99,7 +100,6 @@ def main():
     layer_it = iter(layer)
 
     kc_dict = {}
-    print(args)
     if args['qmk_firmware_root']:
         load_qmk_keycodes(args['qmk_firmware_root'], kc_dict)
     if args['dict']:
