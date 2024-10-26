@@ -1,1 +1,20 @@
 KC_TRNS :::::::::none::
+STICKY_LSFT L.Shift
+STICKY_RSFT R.Shift
+LY_MAGIC Magic
+PGDN_LT_EMAIL ::::L-Email:::::Page Down:
+BSPC_LT_CURSOR ::::L-Cursor:::::<==:
+ESC_LT_FN ::::L-Fn:::::ESC:
+LY_LOWER :::::::::L-Lower:
+SPC_LT_SYMBOL ::::L-Symbol:::::Space:
+ENTER_LT_SYS ::::L-Sys:::::Enter:
+LBRC_LT_WORLD ::::L-World:::::[:
+DEL_LT_NUMBER ::::L-Number:::::DEL:
+GUI_A ::::M-GUI:::::A:
+ALT_S ::::M-ALT:::::S:
+CTL_D ::::M-Ctrl:::::D:
+SFT_F ::::M-Shift:::::F:
+SFT_J ::::M-Shift:::::J:
+CTL_K ::::M-Ctrl:::::K:
+ALT_L ::::M-ALT:::::L:
+GUI_SCLN ::::M-GUI:::::;:

@@ -63,12 +63,11 @@ def load_qmk_keycodes(dir, kc_dict):
 
 def load_custom_dict(dict_file, kc_dict):
     with open(dict_file) as dfd:
-        rows = csv.reader(dfd, delimiter=" ")
-        for row in rows:
-            label = str(row[1])
+        for row in dfd:
+            kc, label = row.split(" ", 1)
             if label.count(':') == 0:
                 label = "\n\n\n\n\n\n\n\n\n" + label + "\n\n"
-            kc_dict[row[0]] = str(row[1]).replace(":", "\n")
+            kc_dict[kc] = label.replace(":", "\n")
     return kc_dict
 
 
