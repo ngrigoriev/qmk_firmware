@@ -18,3 +18,16 @@ SFT_J ::::M-Shift:::::J:
 CTL_K ::::M-Ctrl:::::K:
 ALT_L ::::M-ALT:::::L:
 GUI_SCLN ::::M-GUI:::::;:
+TAB_LT_MOUSE ::::L-Mouse:::::TAB:
+KC_BRIU :::::::::Bright+::
+KC_BRID :::::::::Bright-::
+TO(_CURSOR) :::::::::Cursor L-ON::
+TO(_SYS) :::::::::System L-ON::
+TO(_MAGIC) :::::::::Magic L-ON::
+TO(_BASE) :::::::::Base L-ON::
+TO(_EMAIL) :::::::::Email L-ON::
+TO(_GAMING) :::::::::Gaming L-ON::
+TO(_TYPING) :::::::::Typing L-ON::
+TO(_NUMBER) :::::::::Number L-ON::
+TO(_FN) :::::::::Fn L-ON::
+TO(_MOUSE) :::::::::Mouse L-ON::
