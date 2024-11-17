@@ -31,3 +31,17 @@ TO(_TYPING) :::::::::Typing L-ON::
 TO(_NUMBER) :::::::::Number L-ON::
 TO(_FN) :::::::::Fn L-ON::
 TO(_MOUSE) :::::::::Mouse L-ON::
+TO(_SYMBOL) :::::::::Symbol L-ON::
+MO(_MAGIC) :::::::::L-Magic:
+TO(0) :::::::::0 L-ON::
+TO(1) :::::::::1 L-ON::
+TO(2) :::::::::2 L-ON::
+TO(3) :::::::::3 L-ON::
+TO(4) :::::::::4 L-ON::
+TO(5) :::::::::5 L-ON::
+TO(6) :::::::::6 L-ON::
+TO(7) :::::::::7 L-ON::
+TO(8) :::::::::8 L-ON::
+TO(9) :::::::::9 L-ON::
+KC_APP :::::::::Appl.::
+KC_MPRV :::::::::Prev.::
