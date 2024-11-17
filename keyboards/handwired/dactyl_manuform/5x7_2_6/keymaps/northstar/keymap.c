@@ -22,17 +22,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 enum layers {
     _BASE,
     _LOWER,
-    _TYPING,
-    _GAMING,
+    _FN,    // AKA Function
+    _NUMBER, // AKA Numpad
     _MAGIC,
     _CURSOR,
+    _SYS,
+    _TYPING,
+    _GAMING,
+    _WORLD,
     _EMAIL, // AKA Emoji
-    _NUMBER, // AKA Numpad
-    _FN,    // AKA Function
     _SYMBOL,
     _MOUSE,
-    _SYS,
-    _WORLD
 };
 
 enum custom_keycodes {
@@ -48,8 +48,14 @@ enum custom_keycodes {
     KCC_SEL_ALL,
     KCC_SEL_NONE,
     KCC_SEL_WRD,
+    KCC_EXT_WRD,
     KCC_SEL_LIN,
-    KCC_LOCK
+    KCC_EXT_LIN,
+    KCC_LOCK,
+    KCC_UNDO,
+    KCC_REDO,
+    KCC_FPRV,
+    KCC_FNXT
 };
 
 // Some basic macros
@@ -109,30 +115,30 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
     [_FN] = LAYOUT_5x7_2_6(
-        _______,    KC_F1,      KC_F2,      KC_F3,      KC_F4,      KC_F5,      MO(_MAGIC),             _______,    KC_F6,      KC_F7,      KC_F8,      KC_F9,      KC_F10,     KC_F11,
-        _______,    _______,    _______,    KC_UP,      _______,    _______,    _______,                _______,    _______,    _______,    _______,    _______,    _______,    KC_F12,
-        _______,    _______,    KC_LEFT,    KC_DOWN,    KC_RGHT,    _______,    KC_INT1,                _______,    KC_LEFT,    KC_DOWN,    KC_UP,      KC_RIGHT,   _______,    _______,
-        _______,    _______,    _______,    _______,    _______,    _______,                                        _______,    _______,    _______,    _______,    _______,    _______,
-                                KC_MPRV,    KC_MNXT,                                                                                        _______,    _______,
+        KC_ESC,     KC_F1,      KC_F2,      KC_F3,      KC_F4,      KC_F5,      MO(_MAGIC),             KC_CALC,    KC_F6,      KC_F7,      KC_F8,      KC_F9,      KC_F10,     KC_INS,
+        KC_TAB,     KC_LSFT,    KCC_REDO,   KC_UNDO,    KC_BSPC,    _______,    _______,                KC_WHOM,    KC_F7,      KC_F8,      KC_F9,      KC_F10,     KC_F13,     KC_DEL,
+        KC_CAPS,    KC_LGUI,    KC_LALT,    KC_LCTL,    KC_LSFT,    _______,    KC_INT1,                KC_MYCM,    KC_F4,      KC_F5,      KC_F6,      KC_F11,     KC_F15,     KC_ENTER,
+        _______,    KCC_SEL_ALL,KCC_SEL_LIN,KCC_SEL_WRD,_______,    _______,                                        KC_F1,      KC_F2,      KC_F3,      KC_F12,     KC_F15,     _______,
+                                KCC_EXT_LIN,KCC_EXT_WRD,                                                                                    KC_BRID,    KC_BRIU,
                                                                     _______,    _______,                KC_DEL, _______,
-                                                                            _______,    _______,    _______, _______,
-                                                                            _______,    TO(_BASE),  TO(_BASE), _______
+                                                                            _______,    _______,    KC_VOLD, KC_VOLU,
+                                                                            KC_EJCT,    TO(_BASE),  TO(_BASE), KC_MUTE
     ),
 
     [_NUMBER] = LAYOUT_5x7_2_6(
-        _______,    _______,    _______,    _______,    _______,    _______,    MO(_MAGIC),             _______,    _______,    KC_NUM,     _______,    KC_PMNS,    KC_PPLS,    _______,
-        _______,    _______,    _______,    _______,    _______,    _______,    _______,                _______,    _______,    KC_P7,      KC_P8,      KC_P9,      _______,    _______,
-        _______,    _______,    _______,    _______,    _______,    _______,    _______,                _______,    _______,    KC_P4,      KC_P5,      KC_P6,      KC_PAST,    _______,
-        _______,    _______,    _______,    _______,    _______,    _______,                                        _______,    KC_P1,      KC_P2,      KC_P3,      KC_PSLS,    _______,
-                                _______,    _______,                                                                                        KC_P0,      KC_PDOT,
+        KC_ESC,     KC_A,       KC_B,       KC_C,       KC_D,       KC_E,       MO(_MAGIC),             KC_NUM,     KC_TILD,    KC_CIRC,    KC_HASH,    KC_DLR,     KC_EXLM,    KC_PIPE,
+        _______,    KC_LSFT,    KCC_REDO,   KC_UNDO,    _______,    KC_F,       _______,                KC_LBRC,    KC_PERC,    KC_P7,      KC_P8,      KC_P9,      KC_COLN,    KC_DEL,
+        _______,    KC_LGUI,    KC_LALT,    KC_LCTL,    KC_LSFT,    KC_AT,      _______,                KC_RBRC,    KC_PLUS,    KC_P4,      KC_P5,      KC_P6,      KC_PMNS,    KC_PENT,
+        _______,    KCC_SEL_ALL,KCC_SEL_LIN,KCC_SEL_WRD,KC_UNDS,    _______,                                        KC_PAST,    KC_P1,      KC_P2,      KC_P3,      KC_PSLS,    _______,
+                                KCC_EXT_LIN,KCC_EXT_WRD,                                                                                    KC_P0,      KC_PDOT,
                                                                     _______,    _______,                _______,    KC_PENT,
-                                                                            _______,    _______,    _______,    _______,
+                                                                            KC_PCMM,    KC_PDOT,    KC_LABK,    KC_RABK,
                                                                             _______,    TO(_BASE),  TO(_BASE),  _______
     ),
 
     [_MAGIC] = LAYOUT_5x7_2_6(
         QK_REBOOT,      TO(1),      TO(1),      TO(3),      TO(4),      TO(5),      _______,                CG_SWAP,    TO(6),      TO(7),      TO(8),      TO(9),      TO(0),      QK_REBOOT,
-        _______,        _______,    _______,    _______,    _______,    _______,    _______,                _______,    _______,    _______,    _______,    _______,    _______,    _______,
+        _______,        KC_LSFT,    KCC_REDO,   KC_UNDO,    _______,    _______,    _______,                _______,    _______,    _______,    _______,    _______,    _______,    _______,
         QK_BOOTLOADER,  _______,    _______,    _______,    _______,    _______,    _______,                CG_NORM,    _______,    _______,    _______,    _______,    _______,    QK_BOOTLOADER,
         _______,        _______,    _______,    _______,    _______,    _______,                                        _______,    _______,    _______,    _______,    _______,    _______,
                                     _______,    _______,                                                                                        _______,    _______,
@@ -140,13 +146,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                                                 _______,    _______,    _______,    _______,
                                                                                 _______,    TO(_BASE),  TO(_BASE),  _______
     ),
-    // TBC
+
     [_CURSOR] = LAYOUT_5x7_2_6(
-        KC_ESC,         _______,    _______,    _______,    _______,    _______,    _______,                        _______,    _______,    _______,    _______,    _______,    _______,    _______,
-        KCC_URL,        _______,    _______,    _______,    _______,    _______,    _______,                        _______,    _______,    _______,    _______,    _______,    _______,    _______,
-        KCC_FREP,       _______,    _______,    _______,    _______,    _______,    _______,                        _______,    _______,    _______,    _______,    _______,    _______,    _______,
-        LY_MAGIC,       _______,    _______,    _______,    _______,    _______,                                        _______,    _______,    _______,    _______,    _______,    LY_MAGIC,
-                                    _______,    _______,                                                                                        _______,    _______,
+        KC_ESC,         _______,    _______,    _______,    _______,    _______,    KC_CUT,                         KC_CUT,     KC_DEL,     KC_TAB,     KC_SPC,     KC_ENT,    KC_ESC,      _______,
+        KCC_URL,        KC_LSFT,    KCC_REDO,   KC_UNDO,    _______,    _______,    KC_COPY,                        KC_COPY,    KC_BSPC,    KC_UNDO,    KCC_REDO,   KC_RSFT,    _______,    _______,
+        KCC_FREP,       KC_LGUI,    KC_LALT,    KC_LCTL,    KC_LSFT,    KC_FIND,    KC_PASTE,                       KC_PASTE,   KC_LEFT,    KC_DOWN,    KC_UP,      KC_RIGHT,   _______,    _______,
+        LY_MAGIC,       KCC_SEL_ALL,KCC_SEL_LIN,KCC_SEL_WRD,KC_UNDS,    _______,                                                KC_HOME,    KC_PGUP,    KC_PGDN,    KC_END,     _______,    LY_MAGIC,
+                                    KCC_EXT_LIN,KCC_EXT_WRD,                                                                                        KCC_FPRV, KCC_FNXT,
                                                                         KC_TAB,    _______,                         KCC_SEL_NONE,KCC_SEL_ALL,
                                                                                 KCC_ALT_TAB,KCC_GUI_TAB,    KCC_SEL_LIN,KCC_SEL_WRD,
                                                                                 KCC_CTL_TAB,TO(_BASE),      TO(_BASE),  _______
@@ -162,6 +168,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                                             KC_SCRL,    _______,    _______,    KC_SCRL,
                                                                             KC_PSCR,    TO(_BASE),  TO(_BASE),  KC_SYRQ
     ),
+
     // TODO
     [_TYPING] = LAYOUT_5x7_2_6(
         _______,        _______,    _______,    _______,    _______,    _______,    _______,                _______,    _______,    _______,    _______,    _______,    _______,    _______,
@@ -173,6 +180,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                                                 _______,    _______,    _______,    _______,
                                                                                 _______,    TO(_BASE),  TO(_BASE),  _______
     ),
+
+    // TODO
     [_GAMING] = LAYOUT_5x7_2_6(
         _______,        _______,    _______,    _______,    _______,    _______,    _______,                _______,    _______,    _______,    _______,    _______,    _______,    _______,
         _______,        _______,    _______,    _______,    _______,    _______,    _______,                _______,    _______,    _______,    _______,    _______,    _______,    _______,
@@ -183,6 +192,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                                                 _______,    _______,    _______,    _______,
                                                                                 _______,    TO(_BASE),  TO(_BASE),    _______
     ),
+
+    // TODO
     [_WORLD] = LAYOUT_5x7_2_6(
         _______,        _______,    _______,    _______,    _______,    _______,    _______,                _______,    _______,    _______,    _______,    _______,    _______,    _______,
         _______,        _______,    _______,    _______,    _______,    _______,    _______,                _______,    _______,    _______,    _______,    _______,    _______,    _______,
@@ -191,6 +202,41 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                     _______,    _______,                                                                                        _______,    _______,
                                                                         _______,    _______,                _______,    _______,
                                                                                 _______,    _______,    _______,    _______,
+                                                                                _______,    TO(_BASE),  TO(_BASE),    _______
+    ),
+
+    // TODO
+    [_EMAIL] = LAYOUT_5x7_2_6(
+        _______,        _______,    _______,    _______,    _______,    _______,    _______,                _______,    _______,    _______,    _______,    _______,    _______,    _______,
+        _______,        _______,    _______,    _______,    _______,    _______,    _______,                _______,    _______,    _______,    _______,    _______,    _______,    _______,
+        _______,        _______,    _______,    _______,    _______,    _______,    _______,                _______,    _______,    _______,    _______,    _______,    _______,    _______,
+        LY_MAGIC,       _______,    _______,    _______,    _______,    _______,                                        _______,    _______,    _______,    _______,    _______,    LY_MAGIC,
+                                    _______,    _______,                                                                                        _______,    _______,
+                                                                        _______,    _______,                _______,    _______,
+                                                                                _______,    _______,    _______,    _______,
+                                                                                _______,    TO(_BASE),  TO(_BASE),    _______
+    ),
+
+    // TODO
+    [_SYMBOL] = LAYOUT_5x7_2_6(
+        _______,        _______,    _______,    _______,    _______,    _______,    _______,                _______,    _______,    _______,    _______,    _______,    _______,    _______,
+        _______,        _______,    _______,    _______,    _______,    _______,    _______,                _______,    _______,    _______,    _______,    _______,    _______,    _______,
+        _______,        _______,    _______,    _______,    _______,    _______,    _______,                _______,    _______,    _______,    _______,    _______,    _______,    _______,
+        LY_MAGIC,       _______,    _______,    _______,    _______,    _______,                                        _______,    _______,    _______,    _______,    _______,    LY_MAGIC,
+                                    _______,    _______,                                                                                        _______,    _______,
+                                                                        _______,    _______,                _______,    _______,
+                                                                                _______,    _______,    _______,    _______,
+                                                                                _______,    TO(_BASE),  TO(_BASE),    _______
+    ),
+
+    [_MOUSE] = LAYOUT_5x7_2_6(
+        _______,        _______,    _______,    _______,    _______,    _______,    MS_ACL0,                MS_BTN1,    _______,    _______,    _______,    _______,    _______,    _______,
+        _______,        _______,    MS_WHLL,    MS_UP,      MS_WHLR,    _______,    MS_ACL1,                MS_BTN2,    KC_RSFT,    KC_RCTL,    KC_RALT,    KC_RGUI,    _______,    _______,
+        _______,        _______,    MS_LEFT,    MS_DOWN,    MS_RGHT,    _______,    MS_ACL2,                MS_BTN3,    MS_LEFT,    MS_DOWN,    MS_UP,      MS_RGHT,    _______,    _______,
+        LY_MAGIC,       _______,    _______,    MS_WHLD,    MS_WHLU,    _______,                                        MS_WHLL,    MS_WHLD,    MS_WHLU,    MS_WHLR,    _______,    LY_MAGIC,
+                                    _______,    _______,                                                                                        _______,    _______,
+                                                                        MS_BTN1,    MS_BTN2,                _______,    _______,
+                                                                                MS_BTN3,    _______,    _______,    _______,
                                                                                 _______,    TO(_BASE),  TO(_BASE),    _______
     )
 //    [_NONE] = LAYOUT_5x7_2_6(
