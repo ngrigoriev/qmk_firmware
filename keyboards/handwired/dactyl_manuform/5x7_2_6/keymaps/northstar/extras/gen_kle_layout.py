@@ -33,12 +33,12 @@ def make_label(kc, kc_dict):
     return kc
 
 
-def update_keys(kle_template, layer_it, kc_dict):
+def update_keys(kle_template, layer_it, kc_dict, kb_name):
     result = []
-    for row in kle_template:
-        if isinstance(row, list):
+    for item in kle_template:
+        if isinstance(item, list):
             kle_row = []
-            for obj in row:
+            for obj in item:
                 if isinstance(obj, str):
                     kc = str(next(layer_it))
                     kle_row.append(make_label(kc, kc_dict))
@@ -46,7 +46,9 @@ def update_keys(kle_template, layer_it, kc_dict):
                     kle_row.append(obj)
             result.append(kle_row)
         else:
-            result.append(row)
+            if item.get('name'):
+                item['name'] = kb_name
+            result.append(item)
     return result
 
 
@@ -57,7 +59,7 @@ def load_qmk_keycodes_api(kc_dict):
     API_URL = "https://keyboards.qmk.fm/v1"
     API_METADATA_URL = API_URL + "/constants_metadata.json"
 
-    session = CachedSession(
+    with CachedSession(
         'qmk_api_cache',
         use_cache_dir=True,
         cache_control=True,
@@ -65,19 +67,21 @@ def load_qmk_keycodes_api(kc_dict):
         allowable_codes=[200],
         allowable_methods=['GET'],
         stale_if_error=True,
-    )
+    ) as session:
 
-    md_resp = session.get(API_METADATA_URL)
-    assert md_resp.status_code == 200
-    all_kc_paths = jq_index_prog.input_value(json.loads(md_resp.text)).all()
+        md_resp = session.get(API_METADATA_URL)
+        assert md_resp.status_code == 200
+        all_kc_paths = jq_index_prog.input_value(json.loads(md_resp.text)).all()
+        md_resp.close()
 
-    for kc_path in all_kc_paths:
-        kc_resp = session.get(API_URL + "/constants" + kc_path)
-        assert kc_resp.status_code == 200
-        qmk_dict_transfomed = jq_prog.input_value(json.loads(kc_resp.text))
-        for qmk_kc in iter(qmk_dict_transfomed):
-            if 'label' in qmk_kc:
-                kc_dict[qmk_kc['alias']] = "\n\n\n\n\n\n\n\n\n" + str(qmk_kc['label']) + "\n\n"
+        for kc_path in all_kc_paths:
+            kc_resp = session.get(API_URL + "/constants" + kc_path)
+            assert kc_resp.status_code == 200
+            qmk_dict_transfomed = jq_prog.input_value(json.loads(kc_resp.text))
+            kc_resp.close()
+            for qmk_kc in iter(qmk_dict_transfomed):
+                if 'label' in qmk_kc:
+                    kc_dict[qmk_kc['alias']] = "\n\n\n\n\n\n\n\n\n" + str(qmk_kc['label']) + "\n\n"
 
     return kc_dict
 
@@ -104,7 +108,9 @@ def main():
     parser.add_argument('layer-index', type=int,
                         help='Name of the QMK layer to use (0-based)')
     parser.add_argument('-d', '--dict',
-                        help='Additional dictionary file to use (see dict-sample.json')
+                        help='Additional dictionary file to use (see dict-sample.json)')
+    parser.add_argument('-n', '--keyboard-name',
+                        help='Name to use for the generated keyboard')
 
     # Parse arguments
     args = vars(parser.parse_args())
@@ -121,10 +127,14 @@ def main():
 
     load_qmk_keycodes_api(kc_dict)
 
+    kn = None
+
     if args['dict']:
         load_custom_dict(args['dict'], kc_dict)
+    if args['keyboard_name']:
+        kn = str(args['keyboard_name'])
 
-    kle_result = update_keys(kle_template, layer_it, kc_dict)
+    kle_result = update_keys(kle_template, layer_it, kc_dict, kn)
 
     print(json.dumps(kle_result))
 
